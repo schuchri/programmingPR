@@ -56,9 +56,9 @@ class LinearLogisticRegression(object):
             prediction = self.sigmoid(z)
 
             # Compare it with what it should have been and calculate the cost.
-            target = point[2]
+            target = y[ri]
             point_class = 0
-            if self.labels[i] == 3:
+            if self.labels[ri] == 3:
                 point_class = 1
             cost = np.square(prediction - point_class)
             # Take the derivative of each of the parameters.
