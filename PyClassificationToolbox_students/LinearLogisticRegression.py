@@ -28,11 +28,14 @@ import numpy.matlib
 
 class LinearLogisticRegression(object):
 
-    def __init__(self, learningRate = 0.5, maxIterations = 100):
+    def __init__(self, learningRate = 0.1, maxIterations = 100):
         self.learning_rate = learningRate
         self.max_iterations = maxIterations
         self.labels = None
         self.input = None
+        self.weight1 = np.random.randn()
+        self.weight2 = np.random.randn()
+
 
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
@@ -44,15 +47,14 @@ class LinearLogisticRegression(object):
     def fit(self, X, y):
         self.labels = y
         self.input = X
-        weight1 = np.random.randn()
-        weight2 = np.random.randn()
+        print(X)
         print('Labels ->', y)
         print('Input ->', X)
         for i in range(self.max_iterations):
             # pick any random point within the dataset
             ri = np.random.randint(len(X))
             point = X[ri]
-            z = point[0] * weight1 + point[1] * weight2
+            z = point[0] * self.weight1 + point[1] * self.weight2
             prediction = self.sigmoid(z)
 
             # Compare it with what it should have been and calculate the cost.
@@ -73,8 +75,8 @@ class LinearLogisticRegression(object):
             dcost_dw2 = dcost_pred * dpred_dz * dz_dw2
 
             # Subtract a small fraction of the cost from the parameters w1, w2, b
-            w1 = w1 - self.learning_rate * dcost_dw1
-            w2 = w2 - self.learning_rate * dcost_dw2
+            self.weight1= self.weight1 - self.learning_rate * dcost_dw1
+            self.weight2 = self.weight2 - self.learning_rate * dcost_dw2
 
 
     def gFunc(self, X, theta):
@@ -82,6 +84,16 @@ class LinearLogisticRegression(object):
 
 
     def predict(self, X):
-        return None
+        predictions = []
+        for point in X:
+            predictionZ = point[0] * self.weight1 + point[1] * self.weight2
+            prediction = self.sigmoid(predictionZ)
+            if(prediction > 0.5):
+                prediction = 3
+            else:
+                prediction = 0
+            predictions.append(prediction)
+            print(prediction)
+        return np.array(predictions)
 
 
